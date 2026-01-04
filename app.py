@@ -2,10 +2,22 @@ import os
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from openai import OpenAI
+from flask_cors import CORS
 
 load_dotenv()
 
 app = Flask(__name__)
+
+CORS(app, resources={
+    r"/api/*": {
+        "origins": [
+            "https://id-preview--73d01875-3401-47b1-97fb-e7e891aa818f.lovable.app",
+            # If you also have a production domain, add it here too
+        ],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 DEFAULT_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
